@@ -8,15 +8,25 @@
             <div v-for="(item, i) in test_list" :key="i">
                 <el-row style="type: flex; justify: space-around; align-items: center">
                     <el-col :span="19" style="margin-left: 15px; margin-top: 10px">
-                        <el-row style="font-size: 16px; text-align: left">{{item.name}}</el-row>
-                        <el-row style="font-size: 13px; text-align: left">&nbsp;&nbsp;&nbsp;&nbsp;{{item.description}}</el-row>
-                        <el-row style="font-size: 12px; text-align: left">&nbsp;&nbsp;&nbsp;&nbsp;共有{{item.question_number}}道题目</el-row>
+                        <el-row style="font-size: 16px; text-align: left">{{ item.name }}</el-row>
+                        <el-row style="font-size: 13px; text-align: left">&nbsp;&nbsp;&nbsp;&nbsp;{{
+                            item.description
+                        }}</el-row>
+                        <el-row style="font-size: 12px; text-align: left">&nbsp;&nbsp;&nbsp;&nbsp;共有{{
+                            item.question_number
+                        }}道题目</el-row>
                     </el-col>
                     <el-col :span="4" style="type: flex; align: center">
-                        <el-button type="primary" round @click="goCheck">查看</el-button>
-                        <el-button type="primary" round @click="goRelease">发布任务</el-button>
-                        <el-button v-if="item.isCreator == true" type="primary" round @click="goChange">更改</el-button>
-                        <el-button v-if="item.isCreator == true" type="primary" round @click="goDelete">删除</el-button>
+                        <el-row style="margin: 2px">
+                            <el-button type="primary" round @click="goCheck">查看</el-button>
+                            <el-button type="primary" round @click="goRelease">发布任务</el-button>
+                        </el-row>
+                        <el-row style="margin: 2px">
+                            <el-button v-if="item.isCreator == true" type="primary" round
+                                @click="goChange">更改</el-button>
+                            <el-button v-if="item.isCreator == true" type="danger" round
+                                @click="goDelete">删除</el-button>
+                        </el-row>
                     </el-col>
                 </el-row>
                 <el-divider style="margin: 6px 0"></el-divider>
@@ -27,10 +37,16 @@
             <div v-for="(item, i) in mission_list" :key="i">
                 <el-row style="type: flex; justify: space-around; align-items: center">
                     <el-col :span="19" style="margin-left: 15px; margin-top: 10px">
-                        <el-row style="font-size: 16px; text-align: left">{{item.name}}</el-row>
-                        <el-row style="font-size: 12px; text-align: left">&nbsp;&nbsp;&nbsp;&nbsp;截止至{{item.due}}</el-row>
-                        <el-row style="font-size: 12px; text-align: left">&nbsp;&nbsp;&nbsp;&nbsp;参与人员：{{item.person_range}}</el-row>
-                        <el-row style="font-size: 12px; text-align: left">&nbsp;&nbsp;&nbsp;&nbsp;完成人数：{{item.finish}}/{{item.total}}</el-row>
+                        <el-row style="font-size: 16px; text-align: left">{{ item.name }}</el-row>
+                        <el-row style="font-size: 12px; text-align: left">&nbsp;&nbsp;&nbsp;&nbsp;截止至{{
+                            item.due
+                        }}</el-row>
+                        <el-row style="font-size: 12px; text-align: left">&nbsp;&nbsp;&nbsp;&nbsp;参与人员：{{
+                            item.person_range
+                        }}</el-row>
+                        <el-row style="font-size: 12px; text-align: left">&nbsp;&nbsp;&nbsp;&nbsp;完成人数：{{
+                            item.finish
+                        }}/{{ item.total }}</el-row>
                     </el-col>
                     <el-col :span="4" style="type: flex; align: center">
                         <el-button type="primary" round @click="goResult">导出结果</el-button>
@@ -44,7 +60,7 @@
     <el-dialog v-model="dialogVisible" title="发布任务" append-to-body width="30%" :before-close="handleClose">
         <el-form :model="form">
             <el-form-item label="截止日期" :label-width="formLabelWidth">
-                <el-date-picker v-model="form.time" value-format="yyyy-MM-DD" type="date" placeholder="选择截止日期"/>
+                <el-date-picker v-model="form.time" value-format="yyyy-MM-DD" type="date" placeholder="选择截止日期" />
             </el-form-item>
             <el-form-item label="目标群体" :label-width="formLabelWidth">
                 <el-select v-model="form.region" placeholder="选择目标人群">
@@ -88,7 +104,7 @@ export default {
                 description: '测量情感孤独与社会孤独状况的工具：情感孤独，指缺乏与某人产生亲近与情爱的关系；社会孤独，指缺乏由志趣相投、一起活动的朋友所构成的社交圈子',
                 question_number: 10,
                 isCreator: false
-            }, { 
+            }, {
                 id: 3,
                 name: '16种人格因素问卷',
                 description: '从乐群、聪慧、自律、独立、敏感、冒险、怀疑等16个相对独立的人格特点对人进行描绘，并可以了解应试者在环境适应、专业成就和心理健康等方面的表现',
@@ -101,7 +117,7 @@ export default {
                 question_number: 21,
                 isCreator: true
             }],
-            mission_list:[{
+            mission_list: [{
                 id: 1,
                 name: '贝克焦虑量表',
                 due: '2022年12月1日',
@@ -135,7 +151,7 @@ export default {
             this.dialogVisible = false;
         },
         onSubmit() {
-            ElMessageBox.confirm('确认发布？',  'Warning', {
+            ElMessageBox.confirm('确认发布？', 'Warning', {
                 confirmButtonText: '确定',
                 cancelButtonText: '取消',
                 type: 'warning',
@@ -145,7 +161,7 @@ export default {
                     type: 'success',
                     message: '发布成功！',
                 })
-            }).catch(() => {})
+            }).catch(() => { })
         }
     }
 }
