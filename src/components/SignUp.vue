@@ -1,25 +1,23 @@
 <template>
-<div id="login-view">
+<div id="signup-view">
     <el-header style=" font-size: 30px; background: #409EFF">
         <el-col :span="6">
             <span style="color: #ffffff; text-align:center; line-height:60px;">果壳心理</span>
         </el-col>
     </el-header>
-    <div class="login">
-        <div class="login-box" style="margin: auto; width: 225px;">
-            <h4>登录</h4>
+    <div class="signup">
+        <div class="signup-box" style="margin: auto; width: 225px;">
+            <h4>注册</h4>
             <div class="actor" style="text-align: right;">
-                <h5 v-if="isStudent" v-on:click="changeActor"><font color="#0000FF">心理咨询师登录</font></h5>
-                <h5 v-else v-on:click="changeActor"><font color="#0000FF">学生或教职工登录</font></h5>
             </div>
-            <el-form :model="loginForm" :rules="loginRules" ref="loginForm" label-width="0px" align="center" class="form">
+            <el-form :model="signupForm" :rules="signupRules" ref="signupForm" label-width="0px" align="center" class="form">
                 <el-form-item label="" prop="account" style="width: 100%">
                     <el-row>
                         <el-col :span="4">
                             <el-icon><avatar /></el-icon>
                         </el-col>
                         <el-col :span="20">
-                            <el-input class="inps" :placeholder="getHolder" v-model="loginForm.account"></el-input>
+                            <el-input class="inps" placeholder="学号或工号" v-model="signupForm.account"></el-input>
                         </el-col>
                     </el-row>
                 </el-form-item>
@@ -29,18 +27,25 @@
                             <el-icon><lock /></el-icon>
                         </el-col>
                         <el-col :span="20">
-                            <el-input class="inps" type="password" placeholder="密码" v-model="loginForm.passWord"></el-input>
+                            <el-input class="inps" type="password" placeholder="密码" v-model="signupForm.passWord"></el-input>
                         </el-col>
                     </el-row>
                 </el-form-item>
+              <el-form-item label="" prop="name">
+                <el-row>
+                  <el-col :span="4">
+                    <el-icon><lock /></el-icon>
+                  </el-col>
+                  <el-col :span="20">
+                    <el-input class="inps" placeholder="您的姓名" v-model="signupForm.name"></el-input>
+                  </el-col>
+                </el-row>
+              </el-form-item>
                 <el-form-item style="margin-top: 30px">
-                    <el-button type="primary" round class="submitBtn" @click="submitForm">登录</el-button>
+                    <el-button type="primary" round class="submitBtn" @click="submitForm">注册</el-button>
                 </el-form-item>
-                <div class="unlogin">
-                    <router-link :to="{ path: '/forgetpwd' }"> 忘记密码?</router-link>
-                </div>
-              <div class="unlogin">
-                <router-link :to="{ path: '/signup' }"> 注册</router-link>
+              <div class="unsignup">
+                <router-link :to="{ path: '/' }"> 登录</router-link>
               </div>
             </el-form>
         </div>
@@ -49,18 +54,19 @@
 </template>
 
 <script>
-import {login} from "@/utils/communication";
+import {signup} from "@/utils/communication";
 export default {
-    name: "LogIn",
+    name: "SignUp",
     data: function () {
         return {
             holder: '',
             isStudent: true, 
-            loginForm: {
+            signupForm: {
                 account: "",
                 passWord: "",
+                name: "",
             },
-            loginRules: {
+            signupRules: {
                 account: [{ required: true, message: "请输入账号", trigger: "blur" }],
                 passWord: [{ required: true, message: "请输入密码", trigger: "blur" }],
             },
@@ -68,8 +74,8 @@ export default {
     },
     methods: {
         submitForm() {
-            const userAccount = this.loginForm.account;
-            const userPassword = this.loginForm.passWord;
+            const userAccount = this.signupForm.account;
+            const userPassword = this.signupForm.passWord;
             if (!userAccount) {
                 return this.$message({
                     type: "error",
@@ -84,19 +90,16 @@ export default {
             }
             console.log("用户输入的账号为：", userAccount);
             console.log("用户输入的密码为：", userPassword);
-            let retToken = login({
+            let retToken = signup({
               user:{
                 index: userAccount,
-                password: userPassword
+                password: userPassword,
+                name: this.signupForm.name
               }
             })
-          console.log(retToken);
-            if (retToken.data.error_code === 0){
-              alert("账号或密码错误！")
-              return
-            }
+            if (!retToken) return
             this.$router.push({
-                path: '/home',
+                path: '/',
                 // query: {
                 //     id: '196160e2345c7c9550cc560e38543e637d068ccf4e8a504e9eb7a3fa',
                 // }
@@ -111,12 +114,6 @@ export default {
         }
     },
     computed: {
-        getHolder() {
-            if(this.isStudent) {
-                return "学号或教职工账号";
-            }
-            return "心理咨询师账号";
-        }
     }
 };
 </script>
