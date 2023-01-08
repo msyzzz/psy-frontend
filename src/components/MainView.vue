@@ -35,11 +35,11 @@
             <el-col :span="20">
                 <div class="content">
                     <div v-if="selectIndex == 1">
-                        <StudentTest v-if="isStudent == 'true'"></StudentTest>
+                        <StudentTest v-if="isStudent == true"></StudentTest>
                         <DoctorTest v-else></DoctorTest>
                     </div>
                     <div v-if="selectIndex == 2">
-                        <StudentConsult v-if="isStudent == 'true'"></StudentConsult>
+                        <StudentConsult v-if="isStudent == true"></StudentConsult>
                         <DoctorConsult v-else></DoctorConsult>
                     </div>
                     <div v-if="selectIndex == 3">
@@ -64,7 +64,6 @@ import MineView from '../components/MineView'
 
 export default {
     name: 'MainView',
-    props: ['isStudent'],
     methods: {
         menuSelect(index) {
             this.selectIndex = index;
@@ -73,6 +72,7 @@ export default {
     data() {
         return {
             selectIndex: 1,
+            isStudent: window.history.state.isStudent,
             id: '',
         }
     },
