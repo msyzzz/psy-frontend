@@ -107,10 +107,10 @@ export default {
             }
             this.$router.push({
                 path: '/home',
-                query: {
-                    // id: '196160e2345c7c9550cc560e38543e637d068ccf4e8a504e9eb7a3fa',
-                    isStudent: this.isStudent,
-                }
+                state: { isStudent: this.isStudent }
+                // query: {
+                //     // id: '196160e2345c7c9550cc560e38543e637d068ccf4e8a504e9eb7a3fa',
+                // }
             });
         },
         changeActor() {

@@ -1,6 +1,6 @@
 <template>
     <div id="home">
-        <main-view :isStudent=isStudent></main-view>
+        <main-view />
     </div>
 </template>
 
