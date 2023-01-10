@@ -18,7 +18,7 @@
                     </el-col>
                     <el-col :span="4" style="type: flex; align: center">
                         <el-row style="margin: 2px">
-                            <el-button type="primary" round @click="goCheck">查看</el-button>
+                            <el-button type="primary" round @click="goCheck(i)">查看</el-button>
                             <el-button type="primary" round @click="goRelease">发布任务</el-button>
                         </el-row>
                         <el-row style="margin: 2px">
@@ -137,6 +137,15 @@ export default {
     methods: {
         menuSelect(index) {
             this.selectIndex = index;
+        },
+        goCheck(i) {    //展示问卷
+            var route = this.$router.resolve({
+                path: '/show_test',
+                query: {
+                    index: i
+                }
+            });
+            window.open(route.href);
         },
         goCreate() {
             var route = this.$router.resolve({
