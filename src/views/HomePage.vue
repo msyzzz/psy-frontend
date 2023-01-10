@@ -1,15 +1,15 @@
 <template>
     <div id="home">
-        <MainView/>
+        <main-view />
     </div>
 </template>
 
 <script>
-import MainView from '../components/MainView'
+import MainView from '@/components/MainView.vue'
 export default {
     name: 'HomePage',
     components: {
         MainView
-    }
+    },
 }
 </script>

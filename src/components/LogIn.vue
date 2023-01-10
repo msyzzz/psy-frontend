@@ -1,51 +1,61 @@
 <template>
-<div id="login-view">
-    <el-header style=" font-size: 30px; background: #409EFF">
-        <el-col :span="6">
-            <span style="color: #ffffff; text-align:center; line-height:60px;">果壳心理</span>
-        </el-col>
-    </el-header>
-    <div class="login">
-        <div class="login-box" style="margin: auto; width: 225px;">
-            <h4>登录</h4>
-            <div class="actor" style="text-align: right;">
-                <h5 v-if="isStudent" v-on:click="changeActor"><font color="#0000FF">心理咨询师登录</font></h5>
-                <h5 v-else v-on:click="changeActor"><font color="#0000FF">学生或教职工登录</font></h5>
-            </div>
-            <el-form :model="loginForm" :rules="loginRules" ref="loginForm" label-width="0px" align="center" class="form">
-                <el-form-item label="" prop="account" style="width: 100%">
-                    <el-row>
-                        <el-col :span="4">
-                            <el-icon><avatar /></el-icon>
-                        </el-col>
-                        <el-col :span="20">
-                            <el-input class="inps" :placeholder="getHolder" v-model="loginForm.account"></el-input>
-                        </el-col>
-                    </el-row>
-                </el-form-item>
-                <el-form-item label="" prop="passWord">
-                    <el-row>
-                        <el-col :span="4">
-                            <el-icon><lock /></el-icon>
-                        </el-col>
-                        <el-col :span="20">
-                            <el-input class="inps" type="password" placeholder="密码" v-model="loginForm.passWord"></el-input>
-                        </el-col>
-                    </el-row>
-                </el-form-item>
-                <el-form-item style="margin-top: 30px">
-                    <el-button type="primary" round class="submitBtn" @click="submitForm">登录</el-button>
-                </el-form-item>
-                <div class="unlogin">
-                    <router-link :to="{ path: '/forgetpwd' }"> 忘记密码?</router-link>
+    <div id="login-view">
+        <el-header style=" font-size: 30px; background: #409EFF">
+            <el-col :span="6">
+                <span style="color: #ffffff; text-align:center; line-height:60px;">果壳心理</span>
+            </el-col>
+        </el-header>
+        <div class="login">
+            <div class="login-box" style="margin: auto; width: 225px;">
+                <h4>登录</h4>
+                <div class="actor" style="text-align: right;">
+                    <h5 v-if="isStudent" v-on:click="changeActor">
+                        <font color="#0000FF">心理咨询师登录</font>
+                    </h5>
+                    <h5 v-else v-on:click="changeActor">
+                        <font color="#0000FF">学生或教职工登录</font>
+                    </h5>
                 </div>
-              <div class="unlogin">
-                <router-link :to="{ path: '/signup' }"> 注册</router-link>
-              </div>
-            </el-form>
+                <el-form :model="loginForm" :rules="loginRules" ref="loginForm" label-width="0px" align="center"
+                    class="form">
+                    <el-form-item label="" prop="account" style="width: 100%">
+                        <el-row>
+                            <el-col :span="4">
+                                <el-icon>
+                                    <avatar />
+                                </el-icon>
+                            </el-col>
+                            <el-col :span="20">
+                                <el-input class="inps" :placeholder="getHolder" v-model="loginForm.account"></el-input>
+                            </el-col>
+                        </el-row>
+                    </el-form-item>
+                    <el-form-item label="" prop="passWord">
+                        <el-row>
+                            <el-col :span="4">
+                                <el-icon>
+                                    <lock />
+                                </el-icon>
+                            </el-col>
+                            <el-col :span="20">
+                                <el-input class="inps" type="password" placeholder="密码"
+                                    v-model="loginForm.passWord"></el-input>
+                            </el-col>
+                        </el-row>
+                    </el-form-item>
+                    <el-form-item style="margin-top: 30px">
+                        <el-button type="primary" round class="submitBtn" @click="submitForm">登录</el-button>
+                    </el-form-item>
+                    <div class="unlogin">
+                        <router-link :to="{ path: '/forgetpwd' }"> 忘记密码?</router-link>
+                    </div>
+                    <div class="unlogin">
+                        <router-link :to="{ path: '/signup' }"> 注册</router-link>
+                    </div>
+                </el-form>
+            </div>
         </div>
     </div>
-</div>
 </template>
 
 <script>
@@ -58,7 +68,7 @@ export default {
     data: function () {
         return {
             holder: '',
-            isStudent: true, 
+            isStudent: true,
             loginForm: {
                 account: "",
                 passWord: "",
@@ -100,6 +110,7 @@ export default {
                   store.commit('changeLogin',{ Authorization: response.data["data"]['token']});
                   this.$router.push({
                     path: '/home',
+                    state: { isStudent: this.isStudent }
                   })
                 })
                 .catch(error => {
@@ -118,7 +129,7 @@ export default {
     },
     computed: {
         getHolder() {
-            if(this.isStudent) {
+            if (this.isStudent) {
                 return "学号或教职工账号";
             }
             return "心理咨询师账号";
