@@ -51,6 +51,10 @@
 </template>
 
 <script>
+import axios from "axios";
+import store from "@/store";
+import {ElMessage} from "element-plus";
+
 export default {
     name: 'DoTest',
     data() {
@@ -84,6 +88,7 @@ export default {
             this.questionnaire.question.pop();
         },
         addOption(index) {
+          console.log(JSON.stringify(this.questionnaire));
             this.questionnaire.question[index].option_list.push({ name: '', score: null });
         },
         deleteOption(index) {
@@ -100,6 +105,26 @@ export default {
             this.questionnaire.result.pop();
         },
         submit() {
+          console.log(JSON.stringify(this.questionnaire))
+          axios.post("/questionnaires", {"questionnaire":
+                {name: this.questionnaire.name,
+                  description: this.questionnaire.description,
+                  questions: JSON.stringify(this.questionnaire.question),
+                  results: JSON.stringify(this.questionnaire.result)
+                }})
+              .then(response=> {
+                console.log(response.data)
+                store.commit('changeLogin',{ Authorization: response.data["data"]['token']});
+                this.$router.push({
+                  path: '/home',
+                  state: { isStudent: this.isStudent }
+                })
+              })
+              .catch(error => {
+                console.log(error);
+                ElMessage.error("账号或密码错误！")
+                this.loginForm.passWord=""
+              })
             window.close();
         },
         cancel() {
