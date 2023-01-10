@@ -8,7 +8,7 @@ import * as ElIconModules from '@element-plus/icons-vue'
 
 const app = createApp(App)
 app.config.globalProperties.$http = Axios
-Axios.defaults.baseURL="https://localhost:3000"
+Axios.defaults.baseURL="/api"
 app.use(router).use(ElementPlus).mount('#app')
 
 for(let iconName in ElIconModules){
