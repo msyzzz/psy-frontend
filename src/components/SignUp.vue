@@ -34,10 +34,20 @@
               <el-form-item label="" prop="name">
                 <el-row>
                   <el-col :span="4">
-                    <el-icon><lock /></el-icon>
+                    <el-icon><avatar /></el-icon>
                   </el-col>
                   <el-col :span="20">
                     <el-input class="inps" placeholder="您的姓名" v-model="signupForm.name"></el-input>
+                  </el-col>
+                </el-row>
+              </el-form-item>
+              <el-form-item label="" prop="name">
+                <el-row>
+                  <el-col :span="4">
+                    <el-icon><avatar /></el-icon>
+                  </el-col>
+                  <el-col :span="20">
+                    <el-input class="inps" placeholder="您的所属部门" v-model="signupForm.department"></el-input>
                   </el-col>
                 </el-row>
               </el-form-item>
@@ -54,7 +64,9 @@
 </template>
 
 <script>
-import {signup} from "@/utils/communication";
+import API from "@/utils/API";
+import axios from "axios";
+import { ElMessage } from 'element-plus'
 export default {
     name: "SignUp",
     data: function () {
@@ -65,6 +77,7 @@ export default {
                 account: "",
                 passWord: "",
                 name: "",
+                department:"",
             },
             signupRules: {
                 account: [{ required: true, message: "请输入账号", trigger: "blur" }],
@@ -90,20 +103,36 @@ export default {
             }
             console.log("用户输入的账号为：", userAccount);
             console.log("用户输入的密码为：", userPassword);
-            let retToken = signup({
+            let params = {
               user:{
                 index: userAccount,
                 password: userPassword,
-                name: this.signupForm.name
+                name: this.signupForm.name,
+                department: this.signupForm.department
               }
-            })
-            if (!retToken) return
-            this.$router.push({
-                path: '/',
-                // query: {
-                //     id: '196160e2345c7c9550cc560e38543e637d068ccf4e8a504e9eb7a3fa',
-                // }
-            });
+            };
+          let url = API.SIGNUP.path;
+          axios.post(url, params)
+              .then(response=> {
+                    if(response.data["error_code"]>0){
+                      ElMessage.error('注册失败！请检查该账号是否已被注册')
+                    }
+                    else {
+                      ElMessage.success("注册成功!请使用新账号登录")
+                      this.$router.push({
+                        path: '/'
+                      })
+                    }
+                    })
+              .catch(error => {
+                alert(error)
+              })
+            // this.$router.push({
+            //     path: '/',
+            //     // query: {
+            //     //     id: '196160e2345c7c9550cc560e38543e637d068ccf4e8a504e9eb7a3fa',
+            //     // }
+            // });
         },
         changeActor() {
             if (this.isStudent) {
