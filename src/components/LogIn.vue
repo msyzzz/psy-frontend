@@ -59,7 +59,10 @@
 </template>
 
 <script>
-import { login } from "@/utils/communication";
+import API from "@/utils/API";
+import axios from "axios";
+import store from "@/store";
+import { ElMessage } from 'element-plus'
 export default {
     name: "LogIn",
     data: function () {
@@ -94,24 +97,27 @@ export default {
             }
             console.log("用户输入的账号为：", userAccount);
             console.log("用户输入的密码为：", userPassword);
-            let retToken = login({
-                user: {
-                    index: userAccount,
-                    password: userPassword
-                }
-            })
-            console.log(retToken);
-            if (retToken.data.error_code === 0) {
-                alert("账号或密码错误！")
-                return
-            }
-            this.$router.push({
-                path: '/home',
-                state: { isStudent: this.isStudent }
-                // query: {
-                //     // id: '196160e2345c7c9550cc560e38543e637d068ccf4e8a504e9eb7a3fa',
-                // }
-            });
+            let url = API.LOGIN.path;
+            let params = {
+              user:{
+                index: userAccount,
+                password: userPassword
+              }
+            };
+            axios.post(url, params)
+                .then(response=> {
+                  console.log(response.data["data"]["token"])
+                  store.commit('changeLogin',{ Authorization: response.data["data"]['token']});
+                  this.$router.push({
+                    path: '/home',
+                    state: { isStudent: this.isStudent }
+                  })
+                })
+                .catch(error => {
+                  console.log(error);
+                  ElMessage.error("账号或密码错误！")
+                  this.loginForm.passWord=""
+                })
         },
         changeActor() {
             if (this.isStudent) {

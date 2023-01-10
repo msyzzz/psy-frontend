@@ -1,4 +1,4 @@
-<template>
+  <template>
     <div id="login-page">
         <LogIn/>
     </div>
