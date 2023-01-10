@@ -18,7 +18,7 @@
                 </el-menu-item>
                 <el-menu-item index="3">
                     <el-icon><reading /></el-icon>
-                    知识
+                    对话
                 </el-menu-item>
                 <el-menu-item index="4">
                     <el-icon><user /></el-icon>
@@ -36,7 +36,7 @@
                     <StudentConsult v-if="isStudent == true"></StudentConsult>
                     <DoctorConsult v-else></DoctorConsult>
                 </div>
-                <div v-if="selectIndex == 3"><KnowledgeView /></div>
+                <div v-if="selectIndex == 3"><ChatbotView /></div>
                 <div v-if="selectIndex == 4"><MineView /></div>
             </div>
         </el-col>
@@ -49,8 +49,8 @@ import StudentTest from '../components/StudentTest'
 import DoctorTest from '../components/DoctorTest'
 import StudentConsult from '../components/StudentConsult'
 import DoctorConsult from '../components/DoctorConsult'
-import KnowledgeView from '../components/KnowledgeView'
 import MineView from '../components/MineView'
+import ChatbotView from '../components/ChatbotView'
 
 export default {
     name: 'MainView',
@@ -67,7 +67,7 @@ export default {
         }
     },
     components: {
-        StudentTest, DoctorTest, StudentConsult, DoctorConsult, KnowledgeView, MineView
+        StudentTest, DoctorTest, StudentConsult, DoctorConsult, MineView,ChatbotView
     },
     created() {
         // this.id = this.$route.query.id;

@@ -25,6 +25,7 @@
 </template>
 
 <script>
+import { ElMessage } from 'element-plus'
 export default {
     name: 'DoctorConsult',
     data() {
@@ -67,37 +68,21 @@ export default {
             };
             console.log(params)
             this.$http({
-                "appointment":{
-                    "doctor_id":item.id,
-                    "user_id": this.user.id,
-                    "appointment_date": item.legal_time
-                },
+                // "appointment":{
+                //     "doctor_id":item.id,
+                //     "user_id": this.user.id,
+                //     "appointment_date": item.legal_time
+                // },
                 method: "post",
                 url: "/appointments/create",
                 data: params
             }).then(res => { console.log(res)});
             this.getdata();
+            ElMessage({
+                message: '预约成功',
+                type: 'success',
+            })
         },
-        // goAppoint(item){
-        //     console.log(item);
-        //     console.log(item['user_id']);
-        //     console.log(item['doctor_id']);
-        //     console.log(item['appointment_date']);
-        //     let params = {
-        //         "appointment":{
-        //             "user_id": item['user_id'],
-        //             "doctor_id": item['doctor_id'],
-        //             "appointment_date": item['appointment_date'],
-        //         }
-        //     };
-        //     console.log(params);
-        //     this.$http({
-        //         method: "post",
-        //         url: "/appointments/create",
-        //         data: params
-        //     }).then(res => { console.log(res)});
-        //     this.getdata();
-        // },
         goCancel(item){
             console.log(item)
             let params = {
@@ -110,6 +95,10 @@ export default {
                 data: params
             }).then(res => { console.log(res)});
             this.getdata();
+            ElMessage({
+                message: '取消成功',
+                type: 'success',
+            })
         }
     }
 }
