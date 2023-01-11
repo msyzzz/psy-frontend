@@ -18,7 +18,7 @@
                         }}道题目</el-row>
                     </el-col>
                     <el-col :span="4" style="type: flex; align: center">
-                        <el-button type="primary" round @click="goTest">进行测试</el-button>
+                        <el-button type="primary" round @click="goTest(i)">进行测试</el-button>
                     </el-col>
                 </el-row>
                 <el-divider style="margin: 6px 0"></el-divider>
@@ -119,15 +119,14 @@ export default {
         menuSelect(index) {
             this.selectIndex = index;
         },
-        goTest(i) {
+        goTest(index) {
             // var route = this.$router.resolve({
             //     path: '/do_test',
             // });
-            // history.replaceState({ question_index: i }, '');
             // window.open(route.href);
             this.$router.push({
                 path: '/do_test',
-                state: { index: i }
+                state: { question_index: index }
             })
         },
         goResult(index) {
