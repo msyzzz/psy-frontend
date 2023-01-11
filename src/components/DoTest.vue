@@ -31,6 +31,9 @@
 </style>
 
 <script>
+import axios from "axios";
+import {ElMessage} from "element-plus";
+
 export default {
     name: 'DoTest',
     data() {
@@ -149,16 +152,33 @@ export default {
             this.selectIndex = index;
         },
         submit(question_index) {
+          console.log(JSON.stringify(this.questionnaire))
             var final_score = 0;
             for (var i = 0; i < this.questionnaire[question_index].question.length; i++) {
                 final_score += this.questionnaire[question_index].question[i].option_list[this.questionnaire[question_index].result[i]].score;
             }
             console.log(final_score);
             // window.close();
+          let res = JSON.stringify(this.questionnaire[question_index].result)
+          axios.post("results",{"result":{"questionnaire_id":this.questionnaire_id,"details":res}})
         },
         cancel() {
             window.close();
         }
+    },
+    created() {
+      console.log(this.questionnaire[0].name)
+      axios.get("/questionnaires/6").then(response=> {
+        let dat=response.data["data"];
+        this.questionnaire[0].name=dat["name"];
+        this.questionnaire[0].description=dat["description"];
+        this.questionnaire[0].question = JSON.parse(dat["questions"]);
+        this.questionnaire[0].result = JSON.parse(dat["results"])
+      })
+          .catch(error => {
+            console.log(error);
+            ElMessage.error("账号或密码错误！")
+          })
     }
 }
 </script>
