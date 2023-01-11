@@ -121,6 +121,8 @@ export default {
             }
             console.log(final_score);
             // window.close();
+          let res = JSON.stringify(this.questionnaire[question_index].result)
+          axios.post("results",{"result":{"questionnaire_id":this.questionnaire_id,"details":res}})
         },
         cancel() {
             window.close();
