@@ -18,12 +18,12 @@
                     </el-col>
                     <el-col :span="4" style="type: flex; align: center">
                         <el-row style="margin: 2px">
-                            <el-button type="primary" round @click="goCheck">查看</el-button>
+                            <el-button type="primary" round @click="goCheck(i)">查看</el-button>
                             <el-button type="primary" round @click="goRelease(item.id)">发布任务</el-button>
                         </el-row>
                         <el-row style="margin: 2px">
                             <el-button v-if="item.isCreator == true" type="primary" round
-                                @click="goChange">更改</el-button>
+                                @click="goChange(i)">更改</el-button>
                             <el-button v-if="item.isCreator == true" type="danger" round
                                 @click="goDelete">删除</el-button>
                         </el-row>
@@ -140,6 +140,27 @@ export default {
         menuSelect(index) {
             this.selectIndex = index;
         },
+        goCheck(i) {    //展示问卷
+            var route = this.$router.resolve({
+                path: '/show_test',
+                query: {
+                    index: i
+                }
+            });
+            window.open(route.href);
+        },
+        goChange(i) {   //更改问卷
+            var route = this.$router.resolve({
+                path: '/change_test',
+                query: {
+                    index: i
+                }
+            });
+            window.open(route.href);
+        },
+        goDelete() {   //删除问卷
+            //从后端删除问卷
+        },
         goCreate() {
             var route = this.$router.resolve({
                 path: '/create_test'
@@ -149,6 +170,9 @@ export default {
         goRelease(i) {
           this.form.questionnaire_id = i;
             this.dialogVisible = true;
+        },
+        goResult() {    //查看结果
+          //从后端调取结果
         },
         handleClose() {
             this.dialogVisible = false;
