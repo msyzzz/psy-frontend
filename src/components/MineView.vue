@@ -5,7 +5,7 @@
         </el-menu>
         <div id="appoint" v-if="selectIndex == 1">
             <el-row type="flex" align="middle" style="font-size: 16px; text-align: center; margin-left: 15px; margin-top: 10px">
-                {{user.name}}&nbsp;&nbsp;&nbsp;&nbsp;{{user.department}}{{user.type}}
+                {{user.name}}<br/>{{user.department}}<br/>{{user.type}}
             </el-row>
             <el-row type="flex" align="middle" style="margin-left: 15px; margin-top: 10px">
                 <el-button type="primary" round @click="changePassword">修改密码</el-button>

@@ -18,7 +18,7 @@
                         }}道题目</el-row>
                     </el-col>
                     <el-col :span="4" style="type: flex; align: center">
-                        <el-button type="primary" round @click="goTest(i)">进行测试</el-button>
+                        <el-button type="primary" round @click="goTest(item.id)">进行测试</el-button>
                     </el-col>
                 </el-row>
                 <el-divider style="margin: 6px 0"></el-divider>
@@ -34,7 +34,7 @@
                         }}</el-row>
                     </el-col>
                     <el-col :span="4" style="type: flex; align: center">
-                        <el-button type="primary" round @click="goTest(i)">进行测试</el-button>
+                        <el-button type="primary" round @click="goTest(item.id)">进行测试</el-button>
                     </el-col>
                 </el-row>
                 <el-divider style="margin: 6px 0"></el-divider>
@@ -46,7 +46,7 @@
                     <el-col :span="19" style="margin-left: 15px; margin-top: 10px">
                         <el-row style="font-size: 16px; text-align: left">{{ item.name }}</el-row>
                         <el-row style="font-size: 12px; text-align: left">&nbsp;&nbsp;&nbsp;&nbsp;测试时间：{{
-                            item.time
+                            item.created_at
                         }}</el-row>
                     </el-col>
                     <el-col :span="4" style="type: flex; align: center">
@@ -59,9 +59,9 @@
 
         <el-dialog v-model="dialogVisible" title="测评结果" append-to-body width="30%" :before-close="handleClose">
             <el-row style="font-size: 16px; text-align: left">测试内容:&nbsp;{{ test_records[resultIndex].name }}</el-row>
-            <el-row style="font-size: 16px; text-align: left">测试时间:&nbsp;{{ test_records[resultIndex].time }}</el-row>
+            <el-row style="font-size: 16px; text-align: left">测试时间:&nbsp;{{ test_records[resultIndex].created_at }}</el-row>
             <el-row style="font-size: 16px; text-align: left">测试得分:&nbsp;{{ test_records[resultIndex].score }}</el-row>
-            <el-row style="font-size: 16px; text-align: left">测试结果:&nbsp;{{ test_records[resultIndex].result }}</el-row>
+            <el-row style="font-size: 16px; text-align: left">测试结果:&nbsp;{{ test_records[resultIndex].details }}</el-row>
             <template #footer>
                 <span class="dialog-footer">
                     <el-button type="primary" @click="dialogVisible = false">确定</el-button>
@@ -72,6 +72,9 @@
 </template>
 
 <script>
+import axios from "axios";
+import {ElMessage} from "element-plus";
+
 export default {
     name: 'StudentTest',
     data() {
@@ -109,9 +112,9 @@ export default {
             test_records: [{
                 id: 1,
                 name: '贝克焦虑量表',
-                time: '2022年11月22日 17:44:29',
+                created_at: '2022年11月22日 17:44:29',
                 score: 22,
-                result: '轻度焦虑'
+                details: '轻度焦虑'
             }]
         }
     },
@@ -138,6 +141,25 @@ export default {
             //     customClass: 'result_notify'
             // });
         }
+    },
+    created() {
+      axios.get("/questionnaires").then(response=> {
+        this.test_list = response.data["data"];
+        this.test_list.reverse();
+      })
+          .catch(error => {
+            console.log(error);
+            ElMessage.error("账号或密码错误！")
+          })
+      axios.get("/results").then(response=> {
+        this.test_records = response.data["data"];
+        this.test_records.reverse();
+        console.log(this.test_records)
+      })
+          .catch(error => {
+            console.log(error);
+            ElMessage.error("账号或密码错误！")
+          })
     }
 }
 </script>

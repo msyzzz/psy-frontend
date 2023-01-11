@@ -19,7 +19,7 @@
                     <el-col :span="4" style="type: flex; align: center">
                         <el-row style="margin: 2px">
                             <el-button type="primary" round @click="goCheck">查看</el-button>
-                            <el-button type="primary" round @click="goRelease">发布任务</el-button>
+                            <el-button type="primary" round @click="goRelease(item.id)">发布任务</el-button>
                         </el-row>
                         <el-row style="margin: 2px">
                             <el-button v-if="item.isCreator == true" type="primary" round
@@ -65,8 +65,8 @@
             <el-form-item label="目标群体" :label-width="formLabelWidth">
                 <el-select v-model="form.region" placeholder="选择目标人群">
                     <el-option label="全体成员" value="all" />
-                    <el-option label="全体教职工" value="all_student" />
-                    <el-option label="计算机学院学生" value="compute_student" />
+                    <el-option label="网安学院" value="network_security" />
+                    <el-option label="计算机学院" value="computer" />
                 </el-select>
             </el-form-item>
         </el-form>
@@ -81,6 +81,7 @@
 
 <script>
 import { ElMessage, ElMessageBox } from 'element-plus'
+import axios from "axios";
 
 export default {
     name: 'DoctorTest',
@@ -89,6 +90,7 @@ export default {
             selectIndex: 1,
             dialogVisible: false,
             form: {
+                questionnaire_id: 0,
                 time: '',
                 region: 'all'
             },
@@ -144,7 +146,8 @@ export default {
             });
             window.open(route.href);
         },
-        goRelease() {
+        goRelease(i) {
+          this.form.questionnaire_id = i;
             this.dialogVisible = true;
         },
         handleClose() {
@@ -156,11 +159,13 @@ export default {
                 cancelButtonText: '取消',
                 type: 'warning',
             }).then(() => {
+              axios.post("/tasks", this.form).then(()=>{
                 this.dialogVisible = false;
                 ElMessage({
-                    type: 'success',
-                    message: '发布成功！',
+                  type: 'success',
+                  message: '发布成功！',
                 })
+              }).catch(() => {})
             }).catch(() => { })
         }
     }

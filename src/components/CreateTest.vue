@@ -110,7 +110,8 @@ export default {
                 {name: this.questionnaire.name,
                   description: this.questionnaire.description,
                   questions: JSON.stringify(this.questionnaire.question),
-                  results: JSON.stringify(this.questionnaire.result)
+                  results: JSON.stringify(this.questionnaire.result),
+                  question_number: this.questionnaire.question.length,
                 }})
               .then(response=> {
                 console.log(response.data)
