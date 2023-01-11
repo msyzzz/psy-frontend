@@ -5,16 +5,28 @@
         }}</el-row>
         <el-row style="font-size: 13px; text-align: left">{{ questionnaire[this.$route.query.index].description }}</el-row>
         <el-row>
-            <el-col v-for="(item, i) in questionnaire[this.$route.query.index].question" :key="i" style="margin-top: 10px">
+            <div v-for="(item, i) in questionnaire[this.$route.query.index].question" :key="i" style="margin-top: 10px">
                 <el-row justify="left" style="font-size: 14px">{{ i+ 1}}.&nbsp;{{ item.name }}</el-row>
                 <el-row justify="left" style="font-size: 14px"
                         v-for="(option, j) in item.option_list" :key="j">
                     第{{ j+1 }}个选项：{{ option.name }}；&nbsp;&nbsp;&nbsp;&nbsp;该选项的分值：{{ option.score }}。
                 </el-row>
-            </el-col>
+                <!-- <el-button type="primary" round @click="changeQuestion(i)">修改问题</el-button> -->
+                <el-row type="flex" align="middle" style="font-size: 14px">第{{ i+ 1}}个问题修改：</el-row>
+                <el-row type="flex" align="middle" style="font-size: 14px">
+                        第{{ i+ 1}}个问题描述：
+                    <el-input placeholder="请输入问题描述" v-model="item.name" style="width: max-content"></el-input>
+                </el-row>
+                <el-row type="flex" align="middle" v-for="(option, j) in item.option_list" :key="j" style="font-size: 14px">
+                        第{{ i+ 1}}个问题第{{ j+ 1}}个选项的描述：
+                    <el-input placeholder="请输入选项描述" v-model="option.name" style="width: max-content"></el-input>
+                            &nbsp;&nbsp;&nbsp;&nbsp;该选项的分值：
+                    <el-input placeholder="请输入选项分值" v-model="option.score" style="width: max-content"></el-input>
+                </el-row>
+            </div>
         </el-row>
         <el-row justify="center">
-            <el-button type="primary" round @click="confirm">好的</el-button>
+            <el-button type="primary" round @click="confirm">确认</el-button>
         </el-row>
     </el-col>
 </template>
@@ -27,10 +39,11 @@
 
 <script>
 export default {
-    name: 'ShowTest',
+    name: 'ChangeTest',
     data() {
         return {
-            // question_index: 0,   //window.history.state.index,//error,try solve it next time
+            // question_index: window.history.state.index,//error,try solve it next time
+            question_index: 0,
             questionnaire: [{
                 name: '贝克焦虑量表',
                 description: '本量表含有21道关于焦虑一般症状的问题，请仔细阅读每一道题，指出最近一周内（包括当天）被各种症状烦扰的程度',
@@ -123,7 +136,7 @@ export default {
                     option_list: [{ name: '阿巴', score: 1 }, { name: '阿巴阿巴', score: 2 }, { name: '阿巴阿巴阿巴', score: 3 }, { name: '阿巴阿巴阿巴阿巴', score: 4 }]
                 }],
                 result: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-            }]
+            }],
         }
     },
     methods: {
@@ -131,8 +144,22 @@ export default {
             this.selectIndex = index;
         },
         confirm() {
+            //修改后的问卷传送至后端
             window.close();
-        }
+        },
+        changeQuestion(index) {
+            this.questionnaire.question[index].pop();
+            this.questionnaire.question[index].push({
+                name: '',
+                option_list: [{ name: '', score: null }]
+            });
+        },
+        addOption(index) {
+            this.questionnaire.question[index].option_list.push({ name: '', score: null });
+        },
+        deleteOption(index) {
+            this.questionnaire.question[index].option_list.pop();
+        },
     }
 }
 </script>

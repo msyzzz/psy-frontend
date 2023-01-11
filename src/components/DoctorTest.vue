@@ -23,7 +23,7 @@
                         </el-row>
                         <el-row style="margin: 2px">
                             <el-button v-if="item.isCreator == true" type="primary" round
-                                @click="goChange">更改</el-button>
+                                @click="goChange(i)">更改</el-button>
                             <el-button v-if="item.isCreator == true" type="danger" round
                                 @click="goDelete">删除</el-button>
                         </el-row>
@@ -85,6 +85,7 @@ import { ElMessage, ElMessageBox } from 'element-plus'
 export default {
     name: 'DoctorTest',
     data() {
+        //从后端获取数据
         return {
             selectIndex: 1,
             dialogVisible: false,
@@ -147,14 +148,30 @@ export default {
             });
             window.open(route.href);
         },
+        goRelease() {   //发布问卷
+            this.dialogVisible = true;
+            //从后端发布问卷给用户
+        },
+        goChange(i) {   //更改问卷
+            var route = this.$router.resolve({
+                path: '/change_test',
+                query: {
+                    index: i
+                }
+            });
+            window.open(route.href);
+        },
+        goDelete() {   //删除问卷
+            //从后端删除问卷
+        },
         goCreate() {
             var route = this.$router.resolve({
                 path: '/create_test'
             });
             window.open(route.href);
         },
-        goRelease() {
-            this.dialogVisible = true;
+        goResult() {    //查看结果
+            //从后端调取结果
         },
         handleClose() {
             this.dialogVisible = false;

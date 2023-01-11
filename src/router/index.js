@@ -4,6 +4,7 @@ import LogInPage from '../views/LogInPage.vue'
 import SignUpPage from '../views/SignUpPage.vue'
 import DoTestPage from '../views/DoTestPage.vue'
 import ShowTestPage from '../views/ShowTestPage.vue'
+import ChangeTestPage from '../views/ChangeTestPage.vue'
 import CreateTestPage from '../views/CreateTestPage.vue'
 
 const router = createRouter({
@@ -24,6 +25,10 @@ const router = createRouter({
     path: '/show_test',
     name: 'show_test',
     component: ShowTestPage
+  }, {
+    path: '/change_test',
+    name: 'change_test',
+    component: ChangeTestPage
   }, {
       path: '/create_test',
       name: 'create_test',
