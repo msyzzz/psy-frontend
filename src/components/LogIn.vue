@@ -47,9 +47,6 @@
                         <el-button type="primary" round class="submitBtn" @click="submitForm">登录</el-button>
                     </el-form-item>
                     <div class="unlogin">
-                        <router-link :to="{ path: '/forgetpwd' }"> 忘记密码?</router-link>
-                    </div>
-                    <div class="unlogin">
                         <router-link :to="{ path: '/signup' }"> 注册</router-link>
                     </div>
                 </el-form>

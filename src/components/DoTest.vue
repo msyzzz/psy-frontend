@@ -225,10 +225,18 @@ export default {
           axios.post("results",{"result":{
               "name": this.questionnaire.name,
               "questionnaire_id":this.question_id,
-              "score":final_score}})
+              "score":final_score}}).then(()=>{
+            this.$router.push({
+              path: '/home',
+              state: {isStudent: true}
+            })
+          })
         },
         cancel() {
-            window.close();
+          this.$router.push({
+            path: '/home',
+            state: {isStudent: true}
+          })
         }
     },
     created() {

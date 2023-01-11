@@ -4,7 +4,7 @@
             <el-menu-item index="1">测评问卷</el-menu-item>
             <el-menu-item index="2">测评结果</el-menu-item>
         </el-menu>
-        <div id="test" v-if="selectIndex == 1">
+        <div id="test" v-if="selectIndex === 1">
             <div v-for="(item, i) in test_list" :key="i">
                 <el-row style="type: flex; justify: space-around; align-items: center">
                     <el-col :span="19" style="margin-left: 15px; margin-top: 10px">
@@ -18,7 +18,7 @@
                     </el-col>
                     <el-col :span="4" style="type: flex; align: center">
                         <el-row style="margin: 2px">
-                            <el-button type="primary" round @click="goCheck(i)">查看</el-button>
+                            <el-button type="primary" round @click="goCheck(item.id)">查看</el-button>
                             <el-button type="primary" round @click="goRelease(item.id)">发布任务</el-button>
                         </el-row>
                         <el-row style="margin: 2px">
@@ -60,7 +60,7 @@
     <el-dialog v-model="dialogVisible" title="发布任务" append-to-body width="30%" :before-close="handleClose">
         <el-form :model="form">
             <el-form-item label="截止日期" :label-width="formLabelWidth">
-                <el-date-picker v-model="form.time" value-format="yyyy-MM-DD" type="date" placeholder="选择截止日期" />
+                <el-date-picker v-model="form.time" format="YYYY/MM/DD" value-format="YYYY-MM-DD" type="date" placeholder="选择截止日期" />
             </el-form-item>
             <el-form-item label="目标群体" :label-width="formLabelWidth">
                 <el-select v-model="form.region" placeholder="选择目标人群">
@@ -89,6 +89,7 @@ export default {
         return {
             selectIndex: 1,
             dialogVisible: false,
+            doctor_id: 0,
             form: {
                 questionnaire_id: 0,
                 time: '',
@@ -192,6 +193,37 @@ export default {
               }).catch(() => {})
             }).catch(() => { })
         }
+    },
+    created() {
+      axios.get("/users").then(response=> {
+        let data = response.data["data"];
+        this.doctor_id = data["id"];
+        axios.get("/questionnaires").then(response=> {
+          this.test_list = response.data["data"];
+          this.test_list.reverse();
+          this.test_list.forEach((item) => {
+            if(item.doctor_id === this.doctor_id){
+              item.isCreator = true;
+            }
+          })
+        })
+            .catch(error => {
+              console.log(error);
+              ElMessage.error("账号或密码错误！")
+            })
+      }).catch(error => {
+            console.log(error);
+          })
+
+      axios.get("/results").then(response=> {
+        this.test_records = response.data["data"];
+        this.test_records.reverse();
+        console.log(this.test_records)
+      })
+          .catch(error => {
+            console.log(error);
+            ElMessage.error("账号或密码错误！")
+          })
     }
 }
 </script>

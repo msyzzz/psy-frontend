@@ -1,11 +1,11 @@
 <template>
     <el-col :span="12" :offset="6">
         <el-row justify="center" style="font-size: 24px; text-align: center; color:blue; font-weight: bold;">{{
-            questionnaire[ this.$route.query.index ].name
+            questionnaire.name
         }}</el-row>
-        <el-row style="font-size: 13px; text-align: left">{{ questionnaire[this.$route.query.index].description }}</el-row>
+        <el-row style="font-size: 13px; text-align: left">{{ questionnaire.description }}</el-row>
         <el-row>
-            <el-col v-for="(item, i) in questionnaire[this.$route.query.index].question" :key="i" style="margin-top: 10px">
+            <el-col v-for="(item, i) in questionnaire.question" :key="i" style="margin-top: 10px">
                 <el-row justify="left" style="font-size: 14px">{{ i+ 1}}.&nbsp;{{ item.name }}</el-row>
                 <el-row justify="left" style="font-size: 14px"
                         v-for="(option, j) in item.option_list" :key="j">
@@ -14,7 +14,7 @@
             </el-col>
         </el-row>
         <el-row justify="center">
-            <el-button type="primary" round @click="confirm">好的</el-button>
+            <el-button type="primary" round @click="confirm">返回</el-button>
         </el-row>
     </el-col>
 </template>
@@ -26,12 +26,15 @@
 </style>
 
 <script>
+import axios from "axios";
+import {ElMessage} from "element-plus";
+
 export default {
     name: 'ShowTest',
     data() {
         return {
             // question_index: 0,   //window.history.state.index,//error,try solve it next time
-            questionnaire: [{
+            questionnaire: {
                 name: '贝克焦虑量表',
                 description: '本量表含有21道关于焦虑一般症状的问题，请仔细阅读每一道题，指出最近一周内（包括当天）被各种症状烦扰的程度',
                 question: [{
@@ -99,31 +102,7 @@ export default {
                     option_list: [{ name: '无', score: 1 }, { name: '轻度，无多大烦扰', score: 2 }, { name: '中度，感到不适但尚能忍受', score: 3 }, { name: '重度，只能勉强忍受', score: 4 }]
                 }],
                 result: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-            }, {
-                name: '第二个',
-                description: '第二个',
-                question: [{
-                    name: '阿巴',
-                    option_list: [{ name: '阿巴', score: 1 }, { name: '阿巴阿巴', score: 2 }, { name: '阿巴阿巴阿巴', score: 3 }, { name: '阿巴阿巴阿巴阿巴', score: 4 }]
-                }],
-                result: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-            }, {
-                name: '第三个',
-                description: '第三个',
-                question: [{
-                    name: '阿巴',
-                    option_list: [{ name: '阿巴', score: 1 }, { name: '阿巴阿巴', score: 2 }, { name: '阿巴阿巴阿巴', score: 3 }, { name: '阿巴阿巴阿巴阿巴', score: 4 }]
-                }],
-                result: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-            }, {
-                name: '第四个',
-                description: '第四个',
-                question: [{
-                    name: '阿巴',
-                    option_list: [{ name: '阿巴', score: 1 }, { name: '阿巴阿巴', score: 2 }, { name: '阿巴阿巴阿巴', score: 3 }, { name: '阿巴阿巴阿巴阿巴', score: 4 }]
-                }],
-                result: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-            }]
+            },
         }
     },
     methods: {
@@ -133,6 +112,27 @@ export default {
         confirm() {
             window.close();
         }
+    },
+    created() {
+      console.log(this.questionnaire.name)
+      // axios.post("/questionnaires", {"questionnaire":
+      //       {name: this.questionnaire.name,
+      //         description: this.questionnaire.description,
+      //         questions: JSON.stringify(this.questionnaire.question),
+      //         results: JSON.stringify(this.questionnaire.result),
+      //         question_number: this.questionnaire.question.length,
+      //       }})
+      axios.get("/questionnaires/"+this.$route.query.index.toString()).then(response=> {
+        let dat=response.data["data"];
+        this.questionnaire.name=dat["name"];
+        this.questionnaire.description=dat["description"];
+        this.questionnaire.question = JSON.parse(dat["questions"]);
+        //this.questionnaire = dat
+      })
+          .catch(error => {
+            console.log(error);
+            ElMessage.error("账号或密码错误！")
+          })
     }
 }
 </script>
