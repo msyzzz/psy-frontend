@@ -22,7 +22,7 @@
                         <el-icon>
                             <reading />
                         </el-icon>
-                        知识
+                        对话
                     </el-menu-item>
                     <el-menu-item index="4">
                         <el-icon>
