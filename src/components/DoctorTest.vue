@@ -39,10 +39,10 @@
                     <el-col :span="19" style="margin-left: 15px; margin-top: 10px">
                         <el-row style="font-size: 16px; text-align: left">{{ item.name }}</el-row>
                         <el-row style="font-size: 12px; text-align: left">&nbsp;&nbsp;&nbsp;&nbsp;截止至{{
-                            item.due
+                            item.deadline
                         }}</el-row>
                         <el-row style="font-size: 12px; text-align: left">&nbsp;&nbsp;&nbsp;&nbsp;参与人员：{{
-                            item.person_range
+                            item.testee_range
                         }}</el-row>
                         <el-row style="font-size: 12px; text-align: left">&nbsp;&nbsp;&nbsp;&nbsp;完成人数：{{
                             item.finish
@@ -60,13 +60,13 @@
     <el-dialog v-model="dialogVisible" title="发布任务" append-to-body width="30%" :before-close="handleClose">
         <el-form :model="form">
             <el-form-item label="截止日期" :label-width="formLabelWidth">
-                <el-date-picker v-model="form.time" format="YYYY/MM/DD" value-format="YYYY-MM-DD" type="date" placeholder="选择截止日期" />
+                <el-date-picker v-model="form.deadline" format="YYYY/MM/DD" value-format="YYYY-MM-DD" type="date" placeholder="选择截止日期" />
             </el-form-item>
             <el-form-item label="目标群体" :label-width="formLabelWidth">
-                <el-select v-model="form.region" placeholder="选择目标人群">
-                    <el-option label="全体成员" value="all" />
-                    <el-option label="网安学院" value="network_security" />
-                    <el-option label="计算机学院" value="computer" />
+                <el-select v-model="form.testee_range" placeholder="选择目标人群">
+                    <el-option label="全体成员" value="全体成员" />
+                    <el-option label="网安学院" value="网安学院" />
+                    <el-option label="计算机学院" value="计算机学院" />
                 </el-select>
             </el-form-item>
         </el-form>
@@ -92,8 +92,8 @@ export default {
             doctor_id: 0,
             form: {
                 questionnaire_id: 0,
-                time: '',
-                region: 'all'
+                deadline: '',
+                testee_range: 'all'
             },
             test_list: [{
                 id: 1,
@@ -123,15 +123,15 @@ export default {
             mission_list: [{
                 id: 1,
                 name: '贝克焦虑量表',
-                due: '2022年12月1日',
-                person_range: '全体学生, 全体教职工',
+                deadline: '2022年12月1日',
+                testee_range: '全体学生, 全体教职工',
                 total: 10,
                 finish: 6
             }, {
                 id: 2,
                 name: '抑郁症调查问卷',
-                due: '2022年11月30日',
-                person_range: '计算机学院学生, 电子学院学生',
+                deadline: '2022年11月30日',
+                testee_range: '计算机学院学生, 电子学院学生',
                 total: 3,
                 finish: 1
             }],
@@ -172,8 +172,8 @@ export default {
           this.form.questionnaire_id = i;
             this.dialogVisible = true;
         },
-        goResult() {    //查看结果
-          //从后端调取结果
+        goResult() {    //......todo
+          window.open("https://onestop.ucas.ac.cn/Content/Upload/2016/10/6.doc", '_self');
         },
         handleClose() {
             this.dialogVisible = false;
@@ -209,20 +209,18 @@ export default {
         })
             .catch(error => {
               console.log(error);
-              ElMessage.error("账号或密码错误！")
             })
       }).catch(error => {
             console.log(error);
           })
 
-      axios.get("/results").then(response=> {
-        this.test_records = response.data["data"];
-        this.test_records.reverse();
-        console.log(this.test_records)
+      axios.get("/tasks").then(response=> {
+        this.mission_list = response.data["data"];
+        this.mission_list.reverse();
+        console.log(this.mission_list)
       })
           .catch(error => {
             console.log(error);
-            ElMessage.error("账号或密码错误！")
           })
     }
 }

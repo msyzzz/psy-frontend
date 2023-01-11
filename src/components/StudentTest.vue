@@ -18,7 +18,7 @@
                         }}道题目</el-row>
                     </el-col>
                     <el-col :span="4" style="type: flex; align: center">
-                        <el-button type="primary" round @click="goTest(item.id)">进行测试</el-button>
+                        <el-button type="primary" round @click="goTest(item.id, -1)">进行测试</el-button>
                     </el-col>
                 </el-row>
                 <el-divider style="margin: 6px 0"></el-divider>
@@ -30,11 +30,11 @@
                     <el-col :span="19" style="margin-left: 15px; margin-top: 10px">
                         <el-row style="font-size: 16px; text-align: left">{{ item.name }}</el-row>
                         <el-row style="font-size: 12px; text-align: left">&nbsp;&nbsp;&nbsp;&nbsp;截止至{{
-                            item.due
+                            item.deadline
                         }}</el-row>
                     </el-col>
                     <el-col :span="4" style="type: flex; align: center">
-                        <el-button type="primary" round @click="goTest(item.id)">进行测试</el-button>
+                        <el-button type="primary" round @click="goTest(item.questionnaire_id, item.id)">进行测试</el-button>
                     </el-col>
                 </el-row>
                 <el-divider style="margin: 6px 0"></el-divider>
@@ -103,11 +103,13 @@ export default {
             mission_list: [{
                 id: 1,
                 name: '贝克焦虑量表',
-                due: '2022年12月1日'
+                deadline: '2022年12月1日',
+              questionnaire_id: 1,
             }, {
                 id: 2,
                 name: '抑郁症自测问卷',
-                due: '2022年11月30日'
+                deadline: '2022年11月30日',
+              questionnaire_id: 1,
             }],
             test_records: [{
                 id: 1,
@@ -122,14 +124,14 @@ export default {
         menuSelect(index) {
             this.selectIndex = index;
         },
-        goTest(index) {
+        goTest(index, task) {
             // var route = this.$router.resolve({
             //     path: '/do_test',
             // });
             // window.open(route.href);
             this.$router.push({
                 path: '/do_test',
-                state: { question_index: index }
+                state: { question_index: index, task: task }
             })
         },
         goResult(index) {
@@ -150,6 +152,14 @@ export default {
           .catch(error => {
             console.log(error);
             ElMessage.error("账号或密码错误！")
+          })
+      axios.get("/tasks").then(response=> {
+        this.mission_list = response.data["data"];
+        this.mission_list.reverse();
+        console.log(this.mission_list)
+      })
+          .catch(error => {
+            console.log(error);
           })
       axios.get("/results").then(response=> {
         this.test_records = response.data["data"];

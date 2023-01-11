@@ -39,6 +39,7 @@ export default {
     data() {
         return {
           question_id: window.history.state.question_index,//error,try solve it next time
+          task_id: window.history.state.task,//error,try solve it next time
           questionnaire: {
             name: '贝克焦虑量表',
             description: '本量表含有21道关于焦虑一般症状的问题，请仔细阅读每一道题，指出最近一周内（包括当天）被各种症状烦扰的程度',
@@ -225,7 +226,10 @@ export default {
           axios.post("results",{"result":{
               "name": this.questionnaire.name,
               "questionnaire_id":this.question_id,
-              "score":final_score}}).then(()=>{
+              "score":final_score}}).then((response)=>{
+                if(this.task_id !== -1) {
+                  axios.post("/tasks/result", {id: this.task_id, result: response.data["data"]["id"]})
+                }
             this.$router.push({
               path: '/home',
               state: {isStudent: true}
