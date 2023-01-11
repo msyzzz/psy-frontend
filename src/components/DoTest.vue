@@ -3,7 +3,9 @@
         <el-row justify="center" style="font-size: 24px; text-align: center; color:blue; font-weight: bold;">{{
             questionnaire[question_index].name
         }}</el-row>
-        <el-row style="font-size: 13px; text-align: left">{{ questionnaire[question_index].description }}</el-row>
+        <el-row justify="center" style="font-size: 13px; text-align: left">{{
+            questionnaire[question_index].description
+        }}</el-row>
         <el-row>
             <el-col v-for="(item, i) in questionnaire[question_index].question" :key="i" style="margin-top: 10px">
                 <el-row justify="center" style="font-size: 14px">{{ i+ 1}}.&nbsp;{{ item.name }}</el-row>
@@ -33,8 +35,8 @@ export default {
     name: 'DoTest',
     data() {
         return {
-            // question_index: window.history.state.index,//error,try solve it next time
-            question_index: 0,
+            question_index: window.history.state.question_index,//error,try solve it next time
+            // question_index: 0,
             questionnaire: [{
                 name: '贝克焦虑量表',
                 description: '本量表含有21道关于焦虑一般症状的问题，请仔细阅读每一道题，指出最近一周内（包括当天）被各种症状烦扰的程度',
@@ -103,6 +105,42 @@ export default {
                     option_list: [{ name: '无', score: 1 }, { name: '轻度，无多大烦扰', score: 2 }, { name: '中度，感到不适但尚能忍受', score: 3 }, { name: '重度，只能勉强忍受', score: 4 }]
                 }],
                 result: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+            },
+            {
+                name: '情感一社会孤独量表',
+                description: '本量表含有10道题目',
+                question: [{
+                    name: '我好像没有能交心的朋友，周围的人都像是陌生人。',
+                    option_list: [{ name: '从无', score: 1 }, { name: '偶有', score: 2 }, { name: '有时', score: 3 }, { name: '经常', score: 4 }, { name: '很经常', score: 5 }]
+                }, {
+                    name: '我在所处的集体中找不到归属感。',
+                    option_list: [{ name: '从无', score: 1 }, { name: '偶有', score: 2 }, { name: '有时', score: 3 }, { name: '经常', score: 4 }, { name: '很经常', score: 5 }]
+                }, {
+                    name: '身边大部分人能理解我的追求和爱好，也能理解我的看法。',
+                    option_list: [{ name: '从无', score: 5 }, { name: '偶有', score: 4 }, { name: '有时', score: 3 }, { name: '经常', score: 2 }, { name: '很经常', score: 1 }]
+                }, {
+                    name: '几乎没有人能让我觉得我们是亲密无间、可以依赖的。',
+                    option_list: [{ name: '从无', score: 1 }, { name: '偶有', score: 2 }, { name: '有时', score: 3 }, { name: '经常', score: 4 }, { name: '很经常', score: 5 }]
+                }, {
+                    name: '在遇到事情的时候，我有能给我鼓励和支持的朋友或是爱人。',
+                    option_list: [{ name: '从无', score: 5 }, { name: '偶有', score: 4 }, { name: '有时', score: 3 }, { name: '经常', score: 2 }, { name: '很经常', score: 1 }]
+                }, {
+                    name: '在朋友中，我有归属感，我能感到自己是其中的一员。',
+                    option_list: [{ name: '从无', score: 5 }, { name: '偶有', score: 4 }, { name: '有时', score: 3 }, { name: '经常', score: 2 }, { name: '很经常', score: 1 }]
+                }, {
+                    name: '在需要人陪伴的时候，我能找到与我相伴的人。',
+                    option_list: [{ name: '从无', score: 5 }, { name: '偶有', score: 4 }, { name: '有时', score: 3 }, { name: '经常', score: 2 }, { name: '很经常', score: 1 }]
+                }, {
+                    name: '直到现在，我都没能找到与我心灵契合、相互理解的人。',
+                    option_list: [{ name: '从无', score: 1 }, { name: '偶有', score: 2 }, { name: '有时', score: 3 }, { name: '经常', score: 4 }, { name: '很经常', score: 5 }]
+                }, {
+                    name: '我觉得我可以给另一个人的感情产生重大影响。',
+                    option_list: [{ name: '从无', score: 5 }, { name: '偶有', score: 4 }, { name: '有时', score: 3 }, { name: '经常', score: 2 }, { name: '很经常', score: 1 }]
+                }, {
+                    name: '我没有恋爱关系或是婚姻关系。',
+                    option_list: [{ name: '从无', score: 1 }, { name: '偶有', score: 2 }, { name: '有时', score: 3 }, { name: '经常', score: 4 }, { name: '很经常', score: 5 }]
+                }],
+                result: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
             }]
         }
     },
