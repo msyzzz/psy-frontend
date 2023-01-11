@@ -19,6 +19,38 @@ export function post(params){
     });
 }
 
+export function login(params){
+    let ret = {
+        ok:false,
+        data:{},
+    };
+    new Promise((resolve, reject) => {
+        let url = API.LOGIN.path;
+        axios.post(url, params)
+            .then(response => {
+                ret.ok = true;
+                ret.data = response.data;
+            })
+            .catch(error => {
+                reject(error)
+            })
+    });
+    return ret;
+}
+
+export function signup(params){
+    return new Promise((resolve, reject) => {
+        let url = API.SIGNUP.path;
+        axios.post(url, params)
+            .then(response => {
+                resolve(response)
+            })
+            .catch(error => {
+                reject(error)
+            })
+    });
+}
+
 export function get(url,params){
     return new Promise((resolve, reject) => {
         axios.get(url,params)

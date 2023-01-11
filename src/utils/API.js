@@ -1,4 +1,12 @@
 const API={
+    LOGIN:{
+        path:"/tokens",
+        method:"post"
+    },
+    SIGNUP:{
+        path:"/users",
+        method:"post"
+    },
     GET_MESSAGE_LIST:{
         path:"/api/message",
         method:"get"

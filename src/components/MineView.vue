@@ -5,7 +5,7 @@
         </el-menu>
         <div id="appoint" v-if="selectIndex == 1">
             <el-row type="flex" align="middle" style="font-size: 16px; text-align: center; margin-left: 15px; margin-top: 10px">
-                {{user.name}}&nbsp;&nbsp;&nbsp;&nbsp;{{user.department}}{{user.type}}
+                {{user.name}}<br/>{{user.department}}<br/>{{user.type}}
             </el-row>
             <el-row type="flex" align="middle" style="margin-left: 15px; margin-top: 10px">
                 <el-button type="primary" round @click="changePassword">修改密码</el-button>
@@ -37,6 +37,7 @@
 
 <script>
 import { ElMessage, ElMessageBox } from 'element-plus'
+import axios from "axios";
 
 export default {
     name: 'MineView',
@@ -49,7 +50,7 @@ export default {
                 new_password: '',
                 new_pw_again: ''
             },
-            user: {name: '柴文健', type: '学生', department: '计算机学院'}
+            user: {id: 1, name: '柴文健', type: '学生', department: '计算机学院'}
         }
     },
     methods: {
@@ -73,13 +74,38 @@ export default {
                 cancelButtonText: '取消',
                 type: 'warning',
             }).then(() => {
+              axios.patch("/users/" + this.user.id.toString(),
+                  {"user":{"password": this.form.new_password}}).then(()=> {
                 this.dialogVisible = false;
                 ElMessage({
-                    type: 'success',
-                    message: '修改成功！',
+                  type: 'success',
+                  message: '修改成功！',
                 })
+              }).catch(error => {
+                    console.log(error);
+                    ElMessage.error("账号或密码错误！")
+                  })
+
             }).catch(() => {})
         }
+    },
+    created() {
+      axios.get("/users").then(response=> {
+        let data = response.data["data"];
+        this.user.name = data["name"];
+        this.user.department = data["department"];
+        this.user.id = data["id"];
+        if(data["role"] === 1){
+          this.user.type = "普通用户";
+        }
+        else{
+          this.user.type = "咨询师";
+        }
+      })
+          .catch(error => {
+            console.log(error);
+            ElMessage.error("账号或密码错误！")
+          })
     }
 }
 </script>
